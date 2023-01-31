@@ -1,0 +1,4 @@
+host: hackaton.stg.evo
+port: 8080
+is_debug: False
+static_root: /static/

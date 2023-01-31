@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "build",
+    "module": "commonjs",
+    "target": "es2017",
+    "rootDir": "static",
+    "lib": ["es7", "dom"],
+    "jsx": "react",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "strict": true,
+    "pretty": true,
+    "removeComments": true,
+    "downlevelIteration": true
+  },
+  "exclude": ["node_modules"]
+}

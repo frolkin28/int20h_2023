@@ -1,0 +1,63 @@
+version: '3.7'
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: docker/frontend.dockerfile
+      target: dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run build-watch
+  checks:
+    image: 'hackaton_checks'
+    build:
+      context: .
+      dockerfile: docker/checks.dockerfile
+
+  flake8:
+    image: 'hackaton_checks'
+    container_name: flake8
+    command: flake8 --config=tox.ini .
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+        read_only: true
+
+  mypy:
+    image: 'hackaton_checks'
+    container_name: mypy
+    command: mypy --ignore-missing-imports hackaton tests
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+        read_only: true
+
+  pytest:
+    image: 'hackaton_checks'
+    container_name: pytest
+    command: pytest -vv tests -p no:cacheprovider
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+        read_only: true
+    ports:
+      - 8081:8081
+  backend:
+    depends_on:
+      - frontend
+
+    container_name: backend
+    build:
+      context: .
+      dockerfile: docker/backend.dockerfile
+      target: dev
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/app
