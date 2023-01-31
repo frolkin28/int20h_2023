@@ -61,3 +61,8 @@ services:
       - 8080:8080
     volumes:
       - .:/app
+  
+  mongo-shell:
+    image: mongo
+    stdin_open: true
+    command: mongosh "mongodb+srv://cluster0.v1kmnq6.mongodb.net" --apiVersion 1 --username mongo
