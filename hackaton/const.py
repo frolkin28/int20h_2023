@@ -1,6 +1,9 @@
 import enum
 
 
+MEALDB_API_HOST = 'https://www.themealdb.com/api/json/v1/1'
+
+
 @enum.unique
 class SourceTypeEnum(enum.Enum):
     mealdb = 'mealdb'

@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-from aiohttp import web
+from aiohttp import web, ClientSession
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from hackaton.config import CONFIG
@@ -32,3 +32,14 @@ async def disconnect_mongodb(app: web.Application) -> None:
     client = app['mongo_client']
     client.close()
     log.info('MongoDB disconnected')
+
+
+async def init_client_session(app: web.Application) -> None:
+    app['session'] = ClientSession()
+    log.info('ClientSession initialized')
+
+
+async def destroy_client_session(app: web.Application) -> None:
+    session = app['session']
+    await session.close()
+    log.info('ClientSession closed')
