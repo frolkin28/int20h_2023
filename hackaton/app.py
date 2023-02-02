@@ -6,6 +6,7 @@ from aiohttp_autoreload import start
 from hackaton.config import CONFIG, STATIC_PATH
 from hackaton.middlewares import main_middleware
 from hackaton.views import routes
+from hackaton import signals
 
 
 async def make_app() -> Application:
@@ -13,6 +14,20 @@ async def make_app() -> Application:
         middlewares=[normalize_path_middleware(), main_middleware],
         debug=CONFIG['is_debug']
     )
+
+    app.on_startup.extend(
+        [
+            signals.mongodb_connect,
+        ]
+    )
+
+    # To run before shutdown
+    app.on_cleanup.extend(
+        [
+            signals.disconnect_mongodb,
+        ]
+    )
+
     app.add_routes(routes)
     get_running_loop().set_default_executor(ThreadPoolExecutor(max_workers=4))
     if CONFIG['is_debug']:

@@ -8,7 +8,8 @@ COPY requirements /app/requirements
 
 RUN pip3 install --upgrade pip && \
     pip3 install -r requirements/backend.txt --no-deps --default-timeout=100 && \
-    pip3 install --index-url=https://gitlab.evo.dev/api/v4/projects/90/packages/pypi/simple logevo==4.1.0
+    pip3 install --index-url=https://gitlab.evo.dev/api/v4/projects/90/packages/pypi/simple logevo==4.1.0 && \
+    pip3 install pymongo[srv]
 
 CMD ["python", "-m", "hackaton"]
 

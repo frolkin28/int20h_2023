@@ -4,5 +4,9 @@ config_trafaret = Dict(
     host=String(max_length=64),
     port=Int(gt=0),
     is_debug=Bool,
-    static_root=String(max_length=256)
+    static_root=String(max_length=256),
+    mongo=Dict(
+        uri=String(),
+        db=String(),
+    )
 )
