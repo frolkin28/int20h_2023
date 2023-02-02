@@ -1,13 +1,30 @@
 from umongo import Document, fields
 
 from hackaton.models import instance
+from hackaton.models.ingredient_item import IngredientItem
 
 
 @instance.register
 class Recipe(Document):
-    # inherit Document to create collection in mongo
     class Meta:
         strict = False
 
     doc_id = fields.ObjectIdField(attribute='_id')
-    name = fields.StrField()
+    title = fields.StrField()
+    description = fields.StrField()
+    category = fields.StrField()
+    instructions = fields.StrField()
+    area = fields.StrField()
+    img_url = fields.StrField()
+    video_url = fields.StrField()
+    source_url = fields.StrField()
+    drink_alternate = fields.StrField()
+    difficulty_level = fields.StrField()
+    tags = fields.ListField(
+        fields.EmbeddedField(fields.StrField()),
+        default=[]
+    )
+    ingredients = fields.ListField(
+        fields.EmbeddedField(IngredientItem),
+        default=[]
+    )
