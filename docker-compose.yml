@@ -58,6 +58,8 @@ services:
       dockerfile: docker/backend.dockerfile
       target: dev
     restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
     ports:
       - 8080:8080
     volumes:
