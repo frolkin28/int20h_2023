@@ -50,3 +50,6 @@ build
 venv
 __pycache__
 .lets
+.venv
+__pypackages__
+.vscode

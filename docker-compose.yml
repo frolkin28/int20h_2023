@@ -10,6 +10,7 @@ services:
       - .:/app
       - /app/node_modules
     command: npm run build-watch
+  
   checks:
     image: 'hackaton_checks'
     build:
@@ -19,7 +20,7 @@ services:
   flake8:
     image: 'hackaton_checks'
     container_name: flake8
-    command: flake8 --config=tox.ini .
+    command: pdm run flake8 --config=tox.ini ./hackaton
     volumes:
       - type: bind
         source: .
@@ -29,7 +30,7 @@ services:
   mypy:
     image: 'hackaton_checks'
     container_name: mypy
-    command: mypy --ignore-missing-imports hackaton tests
+    command: pdm run mypy --ignore-missing-imports ./hackaton ./tests
     volumes:
       - type: bind
         source: .
@@ -39,7 +40,7 @@ services:
   pytest:
     image: 'hackaton_checks'
     container_name: pytest
-    command: pytest -vv tests -p no:cacheprovider
+    command: pdm run pytest -vv tests -p no:cacheprovider
     volumes:
       - type: bind
         source: .
@@ -47,16 +48,18 @@ services:
         read_only: true
     ports:
       - 8081:8081
+  
   backend:
     depends_on:
       - frontend
-
     container_name: backend
     build:
       context: .
       dockerfile: docker/backend.dockerfile
       target: dev
     restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
     ports:
       - 8080:8080
     volumes:

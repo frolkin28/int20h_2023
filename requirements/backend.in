@@ -5,3 +5,7 @@ aiohttp-autoreload
 uvloop
 trafaret
 ruamel.yaml
+aiohttp_security[session]
+umongo
+motor
+packaging

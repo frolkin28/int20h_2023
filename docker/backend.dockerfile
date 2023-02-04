@@ -1,36 +1,23 @@
-FROM python:3.8-slim AS base
+FROM python:3.10-slim AS base
+
+RUN apt-get update && apt-get install -y software-properties-common libpq-dev gcc make g++
 
 WORKDIR /app
 
-ENV PYTHONPATH "${PYTHONPATH}:/app"
+# install PDM
+RUN pip install -U pip setuptools wheel
+RUN pip install pdm
 
-COPY requirements /app/requirements
+# copy files
+COPY pyproject.toml pdm.lock /app/
 
-RUN pip3 install --upgrade pip && \
-    pip3 install -r requirements/backend.txt --no-deps --default-timeout=100 && \
-    pip3 install --index-url=https://gitlab.evo.dev/api/v4/projects/90/packages/pypi/simple logevo==4.1.0 && \
-    pip3 install pymongo[srv]
+RUN mkdir __pypackages__ && pdm install --prod --no-lock --no-editable
 
 CMD ["python", "-m", "hackaton"]
 
-
 FROM base AS dev
 
+ENV PYTHONPATH=/app/__pypackages__/3.10/lib
+ENV PYTHONPATH="${PYTHONPATH}:/app"
+
 ENV BACKEND_CONFIG_PATH "config/dev.yaml"
-
-
-FROM base AS real
-
-COPY config /app/config
-COPY build /app/build
-COPY hackaton /app/hackaton
-
-
-FROM real AS stg
-
-ENV BACKEND_CONFIG_PATH "config/stg.yaml"
-
-
-FROM real AS prd
-
-ENV BACKEND_CONFIG_PATH "config/prd.yaml"
