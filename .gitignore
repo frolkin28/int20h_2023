@@ -52,3 +52,4 @@ __pycache__
 .lets
 .venv
 __pypackages__
+.vscode
