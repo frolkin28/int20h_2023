@@ -1,5 +1,5 @@
 from pathlib import Path
-from hackaton.utils import get_env, get_config
+from hackaton.lib.utils import get_env, get_config
 
 PROJECT_PATH = Path(__file__).parent.parent
 

@@ -2,6 +2,7 @@ host: localhost
 port: 8080
 is_debug: True
 static_root: /static/
+secret_key: arGvrpIJ2fJvMw5nSrAkKRUiKj8lDd8NkRBZXNeh51s=
 
 mongo:
   uri: mongodb+srv://mongo:int20h@cluster0.v1kmnq6.mongodb.net/?retryWrites=true&w=majority

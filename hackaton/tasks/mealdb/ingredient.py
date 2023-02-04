@@ -14,7 +14,7 @@ from hackaton.bl.ingredient_type import (
     update_ingredient_type,
 )
 from hackaton.const import MEALDB_API_HOST, SourceTypeEnum
-from hackaton.exceptions import MealDBMigrationException
+from hackaton.lib.exceptions import MealDBMigrationException
 from hackaton.models.ingredient import Indredient
 from hackaton.models.source import Source
 
