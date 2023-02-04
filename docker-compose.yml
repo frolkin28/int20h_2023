@@ -63,8 +63,12 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - .:/app
-  
+      - ./config:/app/config
+      - ./hackaton:/app/hackaton
+      - ./build:/app/build
+      - ./pyproject.toml:/app/pyproject.toml
+      - ./pdm.lock:/app/pdm.lock
+
   mongo-shell:
     image: mongo
     stdin_open: true
