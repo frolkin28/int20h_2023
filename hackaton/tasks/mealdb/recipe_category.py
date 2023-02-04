@@ -10,7 +10,7 @@ from hackaton.bl.recipe_category import (
     update_recipe_category,
 )
 from hackaton.const import MEALDB_API_HOST, SourceTypeEnum
-from hackaton.exceptions import MealDBMigrationException
+from hackaton.lib.exceptions import MealDBMigrationException
 from hackaton.models.recipe_category import RecipeCategory
 from hackaton.models.source import Source
 

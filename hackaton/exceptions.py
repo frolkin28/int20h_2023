@@ -1,3 +1,0 @@
-
-class MealDBMigrationException(Exception):
-    pass

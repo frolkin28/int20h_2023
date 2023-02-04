@@ -42,6 +42,8 @@ dependencies = [
     "umongo>=3.1.0",
     "motor>=3.1.1",
     "packaging>=23.0",
+    "aiohttp-session[secure]>=2.12.0",
+    "passlib>=1.7.4",
 ]
 requires-python = ">=3.10"
 license = {text = "MIT"}
