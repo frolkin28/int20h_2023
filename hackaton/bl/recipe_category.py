@@ -5,6 +5,16 @@ from hackaton.models.recipe_category import RecipeCategory
 from hackaton.models.source import Source
 
 
+async def get_all_recipe_categories_by_source_type(
+    source_type: SourceTypeEnum
+) -> t.List[RecipeCategory]:
+    cursor = RecipeCategory.find({
+        'source.type': source_type.value,
+    })
+
+    return await cursor.to_list(length=None)
+
+
 async def get_recipe_category_by_category_mealdb_id(
     category_mealdb_id: str
 ) -> t.Optional[RecipeCategory]:

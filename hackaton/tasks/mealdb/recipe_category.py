@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import typing as t
 
@@ -16,7 +17,7 @@ from hackaton.models.source import Source
 log = logging.getLogger(__name__)
 
 
-def parse_recipe_category_data(
+def _parse_recipe_category_data(
     mealdb_category_data: t.Dict[str, t.Any]
 ) -> t.Dict[str, t.Any]:
     return {
@@ -26,30 +27,42 @@ def parse_recipe_category_data(
     }
 
 
+async def _migrate_recipe_category(category: t.Dict[str, t.Any]) -> None:
+    category_mealdb_id = category['idCategory']
+    old_category: t.Optional[RecipeCategory] = (
+        await get_recipe_category_by_category_mealdb_id(category_mealdb_id)
+    )
+
+    parsed_data = _parse_recipe_category_data(category)
+
+    if old_category:
+        category = update_recipe_category(old_category, data=parsed_data)
+        await category.commit()
+        category_doc_id = str(category.doc_id)
+        log.info(
+            f'update recipe category '
+            f'{category_mealdb_id=} {category_doc_id=}'
+        )
+    else:
+        source = Source(
+            type=SourceTypeEnum.mealdb.value,
+            id=category_mealdb_id,
+        )
+        category = create_recipe_category(data=parsed_data, source=source)
+        await category.commit()
+        log.info(f'insert recipe category {category_mealdb_id=}')
+
+
 async def migrate_recipe_categories(app: web.Application):
     log.info('==== migrate_recipe_categories STARTED ====')
     recipe_categories = await get_categories_data(app)
 
+    tasks = []
     for category in recipe_categories:
-        category_mealdb_id = category['idCategory']
-        old_category: t.Optional[RecipeCategory] = (
-            await get_recipe_category_by_category_mealdb_id(category_mealdb_id)
-        )
+        # await _migrate_recipe_category(category)
+        tasks.append(_migrate_recipe_category(category))
 
-        parsed_data = parse_recipe_category_data(category)
-
-        if old_category:
-            category = update_recipe_category(old_category, data=parsed_data)
-            await category.commit()
-            log.info(f'update recipe category {category_mealdb_id=}')
-        else:
-            source = Source(
-                type=SourceTypeEnum.mealdb.value,
-                id=category_mealdb_id,
-            )
-            category = create_recipe_category(data=parsed_data, source=source)
-            await category.commit()
-            log.info(f'insert recipe category {category_mealdb_id=}')
+    await asyncio.gather(*tasks)
 
     log.info('==== migrate_recipe_categories FINISHED ====')
 

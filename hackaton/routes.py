@@ -14,3 +14,15 @@ def setup_routes(app: web.Application) -> None:
         '/admin/migration/recipe_categories',
         migration.migrate_recipe_categories
     )
+    app.router.add_get(
+        '/admin/migration/ingredients',
+        migration.migrate_ingredients
+    )
+    app.router.add_get(
+        '/admin/migration/migrate_recipes_by_categories',
+        migration.migrate_recipes_by_categories
+    )
+    app.router.add_get(
+        '/admin/migration/mealdb_full_migration',
+        migration.mealdb_full_migration
+    )

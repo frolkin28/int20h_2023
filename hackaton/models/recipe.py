@@ -2,6 +2,7 @@ from umongo import Document, fields
 
 from hackaton.models import instance
 from hackaton.models.ingredient_item import IngredientItem
+from hackaton.models.source import Source
 
 
 @instance.register
@@ -21,10 +22,11 @@ class Recipe(Document):
     drink_alternate = fields.StrField()
     difficulty_level = fields.StrField()
     tags = fields.ListField(
-        fields.EmbeddedField(fields.StrField()),
+        fields.StrField(),
         default=[]
     )
     ingredients = fields.ListField(
         fields.EmbeddedField(IngredientItem),
         default=[]
     )
+    source = fields.EmbeddedField(Source)
