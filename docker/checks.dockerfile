@@ -1,13 +1,17 @@
-FROM python:3.8-slim
+FROM python:3.10-slim
+
+RUN apt-get update && apt-get install -y software-properties-common libpq-dev gcc make g++
 
 WORKDIR /app
 
-ENV PYTHONPATH "${PYTHONPATH}:/app"
+ENV PYTHONPATH=/app/__pypackages__/3.10/lib
 ENV MYPYPATH "${MYPYPATH}:/app"
 ENV BACKEND_CONFIG_PATH "config/pytest.yaml"
 
-COPY requirements /app/requirements
+RUN pip install -U pip setuptools wheel
+RUN pip install pdm
 
-RUN pip3 install --upgrade pip && \
-  pip3 install -r requirements/backend.txt --no-deps --no-cache-dir && \
-  pip3 install -r requirements/checks.txt --no-deps --no-cache-dir
+# copy files
+COPY pyproject.toml pdm.lock /app/
+
+RUN mkdir __pypackages__ && pdm install --dev --no-lock --no-editable
