@@ -40,7 +40,7 @@ services:
   pytest:
     image: 'hackaton_checks'
     container_name: pytest
-    command: pdm run pytest -vv tests -p no:cacheprovider
+    command: pdm run pytest -vv hackaton/tests -p no:cacheprovider
     volumes:
       - type: bind
         source: .
