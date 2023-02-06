@@ -26,7 +26,7 @@ ENV BACKEND_CONFIG_PATH "config/dev.yaml"
 FROM base AS real
 
 COPY config /app/config
-COPY build /app/build
+# COPY build /app/build
 COPY hackaton /app/hackaton
 
 FROM real AS prd

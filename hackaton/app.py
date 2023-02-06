@@ -41,7 +41,7 @@ async def make_app() -> Application:
     setup_routes(app)
     get_running_loop().set_default_executor(ThreadPoolExecutor(max_workers=4))
     if CONFIG['is_debug']:
-        app.router.add_static(CONFIG['static_root'], STATIC_PATH, name='build')
+        # app.router.add_static(CONFIG['static_root'], STATIC_PATH, name='build')
         start()
 
     secret_key = urlsafe_b64decode(CONFIG['secret_key'].encode('utf-8'))
