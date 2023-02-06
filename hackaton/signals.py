@@ -23,6 +23,7 @@ async def mongodb_connect(app: web.Application) -> None:
     )
     database = mongo_client[mongo_db]
     app['mongo_client'] = mongo_client
+    app['mongo_db'] = database
     app['db_recipe'] = database[mongo_recipe_collection]
     instance.set_db(database)
     log.info('Connected to MongoDB')

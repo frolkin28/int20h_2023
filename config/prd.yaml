@@ -5,5 +5,5 @@ static_root: /static/
 secret_key: arGvrpIJ2fJvMw5nSrAkKRUiKj8lDd8NkRBZXNeh51s=
 
 mongo:
-  uri: mongodb+srv://mongo:int20h@cluster0.v1kmnq6.mongodb.net/?retryWrites=true&w=majority
+  uri: mongodb://mongo:int20h@ac-ceqly4g-shard-00-00.v1kmnq6.mongodb.net:27017,ac-ceqly4g-shard-00-01.v1kmnq6.mongodb.net:27017,ac-ceqly4g-shard-00-02.v1kmnq6.mongodb.net:27017/?ssl=true&replicaSet=atlas-104xsk-shard-0&authSource=admin&retryWrites=true&w=majority
   db: int20h

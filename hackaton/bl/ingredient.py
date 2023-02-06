@@ -1,8 +1,12 @@
 import typing as t
+from bson.objectid import ObjectId
+
+from aiohttp import web
 
 from hackaton.const import SourceTypeEnum
 from hackaton.models.ingredient import Indredient
 from hackaton.models.source import Source
+from hackaton.lib.query import get_ingredient_by_id
 
 
 async def get_ingredient_by_ingredient_mealdb_id(
@@ -37,3 +41,15 @@ def update_ingredient(
     ingredient.update(data)
 
     return ingredient
+
+
+async def push_user_product(app: web.Application, user_id: ObjectId, ingredient_id: str) -> bool:
+    ingr = await get_ingredient_by_id(ingredient_id)
+    if not ingr:
+        return False
+
+    await app['mongo_db'].user.update_one(
+        {'_id': user_id},
+        {'$push': {'product_ids': ingredient_id}},
+    )
+    return True
