@@ -13,3 +13,4 @@ class User(Document):
     password = fields.StrField()
     first_name = fields.StrField()
     last_name = fields.StrField()
+    product_ids = fields.List(fields.StrField())
