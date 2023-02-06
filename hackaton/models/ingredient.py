@@ -5,7 +5,7 @@ from hackaton.models.source import Source
 
 
 @instance.register
-class Indredient(Document):
+class Ingredient(Document):
     class Meta:
         strict = False
 

@@ -1,6 +1,7 @@
 import logging
 import typing as t
 
+from bson import ObjectId
 from decimal import Decimal
 from paginate import Page
 
@@ -11,12 +12,13 @@ from hackaton.const import (
     CREATED_BY_USER_IDS_PARAM,
     AREA_PARAM,
     SourceTypeEnum,
+    INGREDIENT_TYPE_PARAM,
 )
 
 log = logging.getLogger(__name__)
 
 
-class RecipeSearchMongoExecutor:
+class BaseSearchMongoExecutor:
     LIMIT = 10
     DOCS_LIMIT = 10000
 
@@ -143,13 +145,33 @@ class RecipeSearchMongoExecutor:
             t.Optional[t.List[t.Tuple[str, int]]]
         ]
     ):
+        raise NotImplementedError()
+
+    @staticmethod
+    def created_by_user_ids_filter(user_ids: t.List[str]):
+        if not user_ids:
+            return None
+
+        return {
+            'source.type': SourceTypeEnum.user.value,
+            'source.id': {'$in': user_ids}
+        }
+
+
+class RecipeSearchMongoExecutor(BaseSearchMongoExecutor):
+    def _build_query(self) -> (
+        t.Tuple[
+            t.Optional[t.Dict[str, t.Any]],
+            t.Optional[t.List[t.Tuple[str, int]]]
+        ]
+    ):
         id_filter = self._exists('_id')
 
         ingredients_ids_filter = self._ingredients_ids_filter(
             ingredients_ids=self.filter_data.get(INGREDIENTS_IDS_PARAM)
         )
 
-        created_by_user_ids_filter = self._created_by_user_ids_filter(
+        created_by_user_ids_filter = self.created_by_user_ids_filter(
             user_ids=self.filter_data.get(CREATED_BY_USER_IDS_PARAM)
         )
 
@@ -190,12 +212,61 @@ class RecipeSearchMongoExecutor:
             'ingredients.ingredient_id': {'$all': ingredients_ids}
         }
 
-    @staticmethod
-    def _created_by_user_ids_filter(user_ids: t.List[str]):
-        if not user_ids:
+
+class IngredientSearchMongoExecutor(BaseSearchMongoExecutor):
+    def _build_query(self) -> (
+        t.Tuple[
+            t.Optional[t.Dict[str, t.Any]],
+            t.Optional[t.List[t.Tuple[str, int]]]
+        ]
+    ):
+        id_filter = self._exists('_id')
+
+        created_by_user_ids_filter = self.created_by_user_ids_filter(
+            user_ids=self.filter_data.get(CREATED_BY_USER_IDS_PARAM)
+        )
+
+        ingredient_type_filter = self._in(
+            field_name='type',
+            choices=self.filter_data.get(INGREDIENT_TYPE_PARAM)
+        )
+
+        ingredients_ids_filter = self._ingredients_ids_filter(
+            ingredients_ids=self.filter_data.get(INGREDIENTS_IDS_PARAM)
+        )
+
+        filters = [
+            ingredients_ids_filter,
+            created_by_user_ids_filter,
+            ingredient_type_filter,
+        ]
+
+        if not ingredients_ids_filter:
+            filters.append(id_filter)
+
+        filters = [f for f in filters if f]
+
+        if len(filters) == 1:
+            query = filters[0]
+        else:
+            query = self._and(conditions=filters)
+
+        sort_keys = self.filter_data.get(SORT_PARAM)
+        sort_query = self._sort(sort_keys)
+
+        if self.debug:
+            log.info(
+                f'\n\n\n\n{"#" * 100}\n '
+                f'query {query} \n\n sort_query {sort_query} '
+                f'\n{"#" * 100}\n\n'
+            )
+        return query, sort_query
+
+    def _ingredients_ids_filter(self, ingredients_ids: t.List[str]):
+        if not ingredients_ids:
             return None
 
-        return {
-            'source.type': SourceTypeEnum.user.value,
-            'source.id': {'$in': user_ids}
-        }
+        return self._in(
+            field_name='_id',
+            choices=[ObjectId(_id) for _id in ingredients_ids]
+        )

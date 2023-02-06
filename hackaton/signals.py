@@ -14,7 +14,6 @@ async def mongodb_connect(app: web.Application) -> None:
     mongodb_config = CONFIG['mongo']
     mongo_url = mongodb_config['uri']
     mongo_db = mongodb_config['db']
-    mongo_recipe_collection = 'recipe'
 
     mongo_client = AsyncIOMotorClient(
         mongo_url,
@@ -24,7 +23,6 @@ async def mongodb_connect(app: web.Application) -> None:
     database = mongo_client[mongo_db]
     app['mongo_client'] = mongo_client
     app['mongo_db'] = database
-    app['db_recipe'] = database[mongo_recipe_collection]
     instance.set_db(database)
     log.info('Connected to MongoDB')
 

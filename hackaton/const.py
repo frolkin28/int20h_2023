@@ -11,6 +11,8 @@ INGREDIENTS_IDS_PARAM = 'ingredients_ids'
 CREATED_BY_USER_IDS_PARAM = 'created_by_user_ids'
 AREA_PARAM = 'area'
 
+INGREDIENT_TYPE_PARAM = 'ingredient_type'
+
 
 @enum.unique
 class SourceTypeEnum(enum.Enum):

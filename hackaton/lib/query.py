@@ -3,7 +3,7 @@ from bson.errors import InvalidId
 
 from hackaton.lib.payloads.auth import UserPayload
 from hackaton.models.user import User
-from hackaton.models.ingredient import Indredient
+from hackaton.models.ingredient import Ingredient
 from hackaton.models.recipe import Recipe
 
 
@@ -40,7 +40,7 @@ async def get_recipe_by_id(r_id: str) -> Recipe | None:
 
 async def get_ingredient_by_id(ing_id: str) -> Recipe | None:
     try:
-        record = await Indredient.find_one({'_id': ObjectId(ing_id)})
+        record = await Ingredient.find_one({'_id': ObjectId(ing_id)})
     except InvalidId:
         return None
 

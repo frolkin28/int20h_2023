@@ -15,7 +15,7 @@ from hackaton.bl.ingredient_type import (
 )
 from hackaton.const import MEALDB_API_HOST, SourceTypeEnum
 from hackaton.lib.exceptions import MealDBMigrationException
-from hackaton.models.ingredient import Indredient
+from hackaton.models.ingredient import Ingredient
 from hackaton.models.source import Source
 
 log = logging.getLogger(__name__)
@@ -64,7 +64,7 @@ async def _migrate_ingredient_type(ingredient_type_title: str) -> None:
 
 async def _migrate_ingredient(ingredient: t.Dict[str, t.Any]) -> None:
     ingredient_mealdb_id = ingredient['idIngredient']
-    old_ingredient: t.Optional[Indredient] = (
+    old_ingredient: t.Optional[Ingredient] = (
         await get_ingredient_by_ingredient_mealdb_id(ingredient_mealdb_id)
     )
 
