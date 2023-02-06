@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - deploy-ci
+      - master
 
 jobs:
   deploy_production:
