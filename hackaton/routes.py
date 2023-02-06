@@ -6,11 +6,11 @@ from hackaton.handlers.auth import register
 from hackaton.handlers.auth import login
 from hackaton.handlers.auth import logout
 from hackaton.handlers.user import get_user_data
+from hackaton.handlers.index import index
 
 
 def setup_routes(app: web.Application) -> None:
     # health check
-    app.router.add_get('/', health_check)
     app.router.add_get('/health', health_check)
 
     # admin routes
@@ -36,4 +36,9 @@ def setup_routes(app: web.Application) -> None:
     app.router.add_post('/auth/login', login)
     app.router.add_post('/auth/logout', logout)
 
-    app.router.add_get('/user', get_user_data)
+    app.router.add_get('/api/user', get_user_data)
+
+
+    # template routes
+    app.router.add_get('/', index)
+    app.router.add_get('/{tail:(?!(api|auth|admin)/)(.+)}/', index)
