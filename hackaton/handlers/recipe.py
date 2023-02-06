@@ -8,8 +8,6 @@ from hackaton.lib.rest_utils import error_response
 from hackaton.lib.rest_utils import ok_response
 from hackaton.lib.payloads.schemas import RecipeSchema
 
-log = getLogger(__name__)
-
 
 async def recipe_view(request: web.Request) -> web.Response:
     recipe_id = request.match_info['id']
