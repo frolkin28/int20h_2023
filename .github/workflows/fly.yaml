@@ -29,7 +29,7 @@ jobs:
           context: .
           builder: ${{ steps.buildx.outputs.name }}
           file: ./docker/backend.dockerfile
-          target: dev
+          target: prd
           load: true
           tags: ${{ steps.prep.outputs.tagged_image }}
 
