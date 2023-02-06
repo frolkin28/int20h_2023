@@ -1,7 +1,9 @@
 from bson.objectid import ObjectId
+from bson.errors import InvalidId
 
 from hackaton.lib.payloads.auth import UserPayload
 from hackaton.models.user import User
+from hackaton.models.recipe import Recipe
 
 
 async def create_user(user_payload: UserPayload) -> User:
@@ -18,5 +20,18 @@ async def get_user_by_email(email: str) -> User | None:
 async def get_user_by_id(user_id: str | None) -> User | None:
     if not user_id:
         return None
+    try:
+        user = await User.find_one({'_id': ObjectId(user_id)})
+    except InvalidId:
+        return None
 
-    return await User.find_one({'_id': ObjectId(user_id)})
+    return user
+
+
+async def get_recipe_by_id(r_id: str) -> Recipe | None:
+    try:
+        record = await Recipe.find_one({'_id': ObjectId(r_id)})
+    except InvalidId:
+        return None
+
+    return record
