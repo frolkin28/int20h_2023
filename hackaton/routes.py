@@ -1,3 +1,4 @@
+import aiohttp_cors
 from aiohttp import web
 
 from hackaton.handlers.health import health_check
@@ -11,6 +12,7 @@ from hackaton.handlers.recipe import recipe_view
 from hackaton.handlers.search import search_recipe
 from hackaton.handlers.ingredient import add_ingredient
 from hackaton.handlers.ingredient import add_user_product
+from hackaton.config import CONFIG
 
 
 def setup_routes(app: web.Application) -> None:
@@ -50,3 +52,18 @@ def setup_routes(app: web.Application) -> None:
     # template routes
     app.router.add_get('/', index)
     app.router.add_get('/{tail:(?!(api|auth|admin)/)(.+)}/', index)
+
+    if CONFIG['is_debug']:
+        # Configure default CORS settings.
+        cors = aiohttp_cors.setup(app, defaults={
+            "*": aiohttp_cors.ResourceOptions(
+                allow_credentials=True,
+                expose_headers="*",
+                allow_headers="*",
+                allow_methods='*',
+            )
+        })
+
+        # Configure CORS on all routes.
+        for route in list(app.router.routes()):
+            cors.add(route)

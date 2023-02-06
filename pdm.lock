@@ -30,6 +30,14 @@ version = "0.0.1"
 summary = "Makes aiohttp server autoreload on source code change"
 
 [[package]]
+name = "aiohttp-cors"
+version = "0.7.0"
+summary = "CORS support for aiohttp"
+dependencies = [
+    "aiohttp>=1.1",
+]
+
+[[package]]
 name = "aiohttp-security"
 version = "0.4.0"
 summary = "security for aiohttp.web"
@@ -550,7 +558,7 @@ dependencies = [
 
 [metadata]
 lock_version = "4.1"
-content_hash = "sha256:f2f18d417c4d89c3abe9c2fdd55c106b630eda92770d629e5ae0ce5bac5820d9"
+content_hash = "sha256:83d01c2de89e7a3a64f43f3b00fba143432d0224f46343c0cedc175c3f9f942e"
 
 [metadata.files]
 "aiodns 3.0.0" = [
@@ -648,6 +656,10 @@ content_hash = "sha256:f2f18d417c4d89c3abe9c2fdd55c106b630eda92770d629e5ae0ce5ba
 ]
 "aiohttp-autoreload 0.0.1" = [
     {url = "https://files.pythonhosted.org/packages/6e/9d/76cd889fe5650a952b538012d305e1dc7eddf06e36642f93a5a93d203dcd/aiohttp_autoreload-0.0.1.tar.gz", hash = "sha256:ac4153d42c05324cbfb8790762afe73edc87cdb9205b5e9e14127dcad9c8df4c"},
+]
+"aiohttp-cors 0.7.0" = [
+    {url = "https://files.pythonhosted.org/packages/13/e7/e436a0c0eb5127d8b491a9b83ecd2391c6ff7dcd5548dfaec2080a2340fd/aiohttp_cors-0.7.0-py3-none-any.whl", hash = "sha256:0451ba59fdf6909d0e2cd21e4c0a43752bc0703d33fc78ae94d9d9321710193e"},
+    {url = "https://files.pythonhosted.org/packages/44/9e/6cdce7c3f346d8fd487adf68761728ad8cd5fbc296a7b07b92518350d31f/aiohttp-cors-0.7.0.tar.gz", hash = "sha256:4d39c6d7100fd9764ed1caf8cebf0eb01bf5e3f24e2e073fda6234bc48b19f5d"},
 ]
 "aiohttp-security 0.4.0" = [
     {url = "https://files.pythonhosted.org/packages/36/01/d85be376b7c1773b3cb7849cd56dc7d38165664df7de2d3e20af507ef5bb/aiohttp-security-0.4.0.tar.gz", hash = "sha256:40d4bb150454e392c2dfa3620f6eab28e140e94cf0c2d3b4bf43aef653ec9405"},
