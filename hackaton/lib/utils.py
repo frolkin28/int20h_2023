@@ -4,7 +4,9 @@ import trafaret as tr
 
 from os import getenv
 from pathlib import Path
+
 from ruamel.yaml import safe_load
+from umongo import Document
 
 
 ConfigTrafaret = tr.Dict(
@@ -32,3 +34,9 @@ def get_config(path: str | Path) -> dict[str, t.Any]:
         config = safe_load(stream.read())
         ConfigTrafaret.check(config)
         return config
+
+
+def serialize_mongo_record(record: Document) -> dict[str, t.Any]:
+    data = record.to_mongo()
+    data['id'] = str(data.pop('_id'))
+    return data

@@ -1,12 +1,11 @@
 from http import client as httplib
-from logging import getLogger
 
 from aiohttp import web
 
 from hackaton.lib.query import get_recipe_by_id
 from hackaton.lib.rest_utils import error_response
 from hackaton.lib.rest_utils import ok_response
-from hackaton.lib.payloads.schemas import RecipeSchema
+from hackaton.lib.utils import serialize_mongo_record
 
 
 async def recipe_view(request: web.Request) -> web.Response:
@@ -15,5 +14,5 @@ async def recipe_view(request: web.Request) -> web.Response:
     if not recipe:
         return error_response(code=httplib.NOT_FOUND)
 
-    recipe_data = RecipeSchema().dump(recipe)
+    recipe_data = serialize_mongo_record(recipe)
     return ok_response(payload=recipe_data)
