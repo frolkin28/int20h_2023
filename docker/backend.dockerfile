@@ -13,11 +13,22 @@ COPY pyproject.toml pdm.lock /app/
 
 RUN mkdir __pypackages__ && pdm install --prod --no-lock --no-editable
 
+ENV PYTHONPATH=/app/__pypackages__/3.10/lib
+ENV PYTHONPATH="${PYTHONPATH}:/app"
+ENV PYTHONUNBUFFERED=1
+
 CMD ["python", "-m", "hackaton"]
 
 FROM base AS dev
 
-ENV PYTHONPATH=/app/__pypackages__/3.10/lib
-ENV PYTHONPATH="${PYTHONPATH}:/app"
-
 ENV BACKEND_CONFIG_PATH "config/dev.yaml"
+
+FROM base AS real
+
+COPY config /app/config
+# COPY build /app/build
+COPY hackaton /app/hackaton
+
+FROM real AS prd
+
+ENV BACKEND_CONFIG_PATH "config/prd.yaml"

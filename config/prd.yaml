@@ -1,5 +1,9 @@
-host: hackaton.prd.evo
+host: int20h-2023.fly.dev
 port: 8080
-is_debug: False
+is_debug: true
 static_root: /static/
 secret_key: arGvrpIJ2fJvMw5nSrAkKRUiKj8lDd8NkRBZXNeh51s=
+
+mongo:
+  uri: mongodb+srv://mongo:int20h@cluster0.v1kmnq6.mongodb.net/?retryWrites=true&w=majority
+  db: int20h
