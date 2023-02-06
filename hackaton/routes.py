@@ -8,6 +8,7 @@ from hackaton.handlers.auth import logout
 from hackaton.handlers.user import get_user_data
 from hackaton.handlers.index import index
 from hackaton.handlers.recipe import recipe_view
+from hackaton.handlers.search import search_recipe
 
 
 def setup_routes(app: web.Application) -> None:
@@ -39,6 +40,8 @@ def setup_routes(app: web.Application) -> None:
 
     app.router.add_get('/api/user', get_user_data)
     app.router.add_get(r'/api/recipe/{id:\w+}', recipe_view)
+
+    app.router.add_post('/api/recipe/search', search_recipe)
 
     # template routes
     app.router.add_get('/', index)
