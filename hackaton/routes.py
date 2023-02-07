@@ -9,7 +9,7 @@ from hackaton.handlers.auth import login
 from hackaton.handlers.auth import logout
 from hackaton.handlers.user import get_user_data
 from hackaton.handlers.index import index
-from hackaton.handlers.recipe import recipe_view
+from hackaton.handlers.recipe import create_recipe_category_handler, recipe_view
 from hackaton.handlers.search import search_recipe
 from hackaton.handlers.search import search_ingredient
 from hackaton.handlers.ingredient import add_ingredient
@@ -59,6 +59,7 @@ def setup_routes(app: web.Application) -> None:
     app.router.add_post('/api/ingredient/search', search_ingredient)
     app.router.add_get('/api/ingredient_types', get_ingredient_type_list)
     app.router.add_post('/api/ingredient_type', create_ingredient_type_handler)
+    app.router.add_post('/api/recipe_category', create_recipe_category_handler)
 
     # template routes
     app.router.add_get('/', index)

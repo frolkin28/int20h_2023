@@ -27,7 +27,11 @@ def error_response(
     def _prepare_errors(errors: dict[str, t.Any]):
         resp_error = []
         for k, v in errors.items():
-            resp_error.append({'name': k, 'value': v})
+            if isinstance(v, str):
+                resp_error.append({'name': k, 'value': v})
+            elif isinstance(v, list):
+                resp_error.append({'name': k, 'value': v[0]})
+
         return resp_error
 
     data = dict(

@@ -3,10 +3,12 @@ from bson.errors import InvalidId
 
 from hackaton.lib.payloads.auth import UserPayload
 from hackaton.lib.payloads.ingredient import IngredientTypePayload
+from hackaton.lib.payloads.recipe import RecipeCategoryPayload
 from hackaton.models.user import User
 from hackaton.models.ingredient import Ingredient
 from hackaton.models.ingredient_type import IngredientType
 from hackaton.models.recipe import Recipe
+from hackaton.models.recipe_category import RecipeCategory
 from hackaton.models.source import Source
 
 
@@ -67,3 +69,14 @@ async def create_ingredient_type(
 
     await ingr_type.commit()
     return ingr_type
+
+
+async def create_recipe_category(
+    payload: dict[str, str],
+    source: Source,
+) -> IngredientType:
+    recipe_cat = RecipeCategory(**payload)
+    recipe_cat.source = source
+
+    await recipe_cat.commit()
+    return recipe_cat
