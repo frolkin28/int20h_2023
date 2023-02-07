@@ -46,6 +46,7 @@ dependencies = [
     "passlib>=1.7.4",
     "paginate==0.5.6",
     "aiohttp-cors>=0.7.0",
+    "marshmallow>=3.19.0",
 ]
 requires-python = ">=3.10"
 license = {text = "MIT"}
