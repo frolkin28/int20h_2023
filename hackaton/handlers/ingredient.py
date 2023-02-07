@@ -10,7 +10,9 @@ from hackaton.lib.auth import with_auth_user
 from hackaton.bl.ingredient import create_ingredient
 from hackaton.bl.ingredient import push_user_product
 from hackaton.lib.query import get_ingredient_types
-from hackaton.lib.payloads.indredient import IngredientPayload
+from hackaton.lib.query import create_ingredient_type
+from hackaton.lib.payloads.ingredient import IngredientPayload
+from hackaton.lib.payloads.ingredient import IngredientTypePayload
 from hackaton.lib.exceptions import SchemaValidationError
 from hackaton.lib.rest_utils import error_response
 from hackaton.lib.rest_utils import ok_response
@@ -26,7 +28,10 @@ async def add_ingredient(request: web.Request, user: User) -> web.Response:
         register_payload = IngredientPayload.load(ingredient_data)
     except SchemaValidationError as e:
         log.error(f'Invalid ingredient request data: {e.errors}')
-        return error_response(code=httplib.BAD_REQUEST, errors=e.errors)
+        return error_response(
+            code=httplib.BAD_REQUEST,
+            errors_mapping=e.errors,
+        )
 
     source = Source(
         type=SourceTypeEnum.user.value,
@@ -68,3 +73,34 @@ async def get_ingredient_type_list(request: web.Request) -> web.Response:
     offset = int(request.query.get('offset', 0))
     ingr_types = await get_ingredient_types(limit, offset)
     return ok_response(payload=serialize_mongo_records(ingr_types))
+
+
+@with_auth_user
+async def create_ingredient_type_handler(
+    request: web.Request,
+    user: User,
+) -> web.Response:
+    request_data = await request.json()
+    try:
+        payload = IngredientTypePayload.load(request_data)
+    except SchemaValidationError as e:
+        log.error(f'Invalid ingredient type creation request data: {e.errors}')
+        return error_response(
+            code=httplib.BAD_REQUEST,
+            errors_mapping=e.errors,
+        )
+
+    source = Source(
+        type=SourceTypeEnum.user.value,
+        id=str(user.doc_id),
+    )
+
+    ingredient_type = await create_ingredient_type(
+        payload=payload,
+        source=source
+    )
+
+    return ok_response(
+        code=httplib.CREATED,
+        payload={'ingredient_id': str(ingredient_type.doc_id)},
+    )

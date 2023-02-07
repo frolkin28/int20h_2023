@@ -2,10 +2,12 @@ from bson.objectid import ObjectId
 from bson.errors import InvalidId
 
 from hackaton.lib.payloads.auth import UserPayload
+from hackaton.lib.payloads.ingredient import IngredientTypePayload
 from hackaton.models.user import User
 from hackaton.models.ingredient import Ingredient
 from hackaton.models.ingredient_type import IngredientType
 from hackaton.models.recipe import Recipe
+from hackaton.models.source import Source
 
 
 async def create_user(user_payload: UserPayload) -> User:
@@ -53,3 +55,15 @@ async def get_ingredient_types(limit: int = 10, offset: int = 0) -> list[Ingredi
     async for record in IngredientType.find({}).skip(offset).limit(limit):
         res.append(record)
     return res
+
+
+async def create_ingredient_type(
+    payload: IngredientTypePayload,
+    source: Source,
+) -> IngredientType:
+    ingr_type_dict = payload.to_dict()
+    ingr_type = IngredientType(**ingr_type_dict)
+    ingr_type.source = source
+
+    await ingr_type.commit()
+    return ingr_type
