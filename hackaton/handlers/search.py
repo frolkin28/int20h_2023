@@ -58,6 +58,7 @@ async def search_recipe(request: web.Request) -> web.Response:
             "prevPage": pager.previous_page,
             "pageAmount": pager.page_count,
             "totalHits": pager.item_count,
+            "itemsPerPage": pager.items_per_page,
             "recipes": recipes,
         },
     )
@@ -111,6 +112,7 @@ async def search_ingredient(request: web.Request) -> web.Response:
             "prevPage": pager.previous_page,
             "pageAmount": pager.page_count,
             "totalHits": pager.item_count,
+            "itemsPerPage": pager.items_per_page,
             "ingredients": ingredients,
         },
     )

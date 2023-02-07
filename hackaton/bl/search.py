@@ -13,13 +13,16 @@ from hackaton.const import (
     AREA_PARAM,
     SourceTypeEnum,
     INGREDIENT_TYPE_PARAM,
+    RECIPE_CATEGORY_PARAM,
+    PAGE_SIZE_PARAM,
 )
 
 log = logging.getLogger(__name__)
 
 
 class BaseSearchMongoExecutor:
-    LIMIT = 10
+    DEFAULT_PAGE_SIZE = 10
+    MAX_PAGE_SIZE = 100
     DOCS_LIMIT = 10000
 
     def __init__(
@@ -40,7 +43,7 @@ class BaseSearchMongoExecutor:
             if sort_query:
                 cursor.sort(sort_query)
 
-            self._data = await cursor.to_list(length=self.LIMIT)
+            self._data = await cursor.to_list(length=self.page_size)
 
         return self._data
 
@@ -50,16 +53,23 @@ class BaseSearchMongoExecutor:
         return max(page, 1)
 
     @property
+    def page_size(self) -> int:
+        page_size = (
+            self.filter_data.get(PAGE_SIZE_PARAM, self.DEFAULT_PAGE_SIZE)
+        )
+        return min(page_size, self.MAX_PAGE_SIZE)
+
+    @property
     def slice(self) -> tuple:
-        start = (self.page - 1) * self.LIMIT
-        end = self.page * self.LIMIT
+        start = (self.page - 1) * self.page_size
+        end = self.page * self.page_size
         return start, end
 
     async def get_pager(self) -> Page:
         return Page(
             await self.get_result(),
             page=self.page,
-            items_per_page=self.LIMIT,
+            items_per_page=self.page_size,
             item_count=await self._get_count(),
         )
 
@@ -180,11 +190,17 @@ class RecipeSearchMongoExecutor(BaseSearchMongoExecutor):
             choices=self.filter_data.get(AREA_PARAM)
         )
 
+        recipe_category_filter = self._in(
+            field_name='category',
+            choices=self.filter_data.get(RECIPE_CATEGORY_PARAM)
+        )
+
         filters = [
             id_filter,
             ingredients_ids_filter,
             created_by_user_ids_filter,
             area_filter,
+            recipe_category_filter,
         ]
 
         filters = [f for f in filters if f]

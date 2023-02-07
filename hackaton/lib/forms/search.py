@@ -7,6 +7,8 @@ from hackaton.const import (
     CREATED_BY_USER_IDS_PARAM,
     AREA_PARAM,
     INGREDIENT_TYPE_PARAM,
+    RECIPE_CATEGORY_PARAM,
+    PAGE_SIZE_PARAM,
 )
 from hackaton.lib.forms import ListOrOne
 
@@ -25,6 +27,13 @@ class SearchRecipeSchema(Schema):
     page_number = fields.Int(
         attribute=PAGE_NUMBER_PARAM,
         data_key=PAGE_NUMBER_PARAM,
+        missing=missing,
+    )
+
+    # page size
+    page_size = fields.Int(
+        attribute=PAGE_SIZE_PARAM,
+        data_key=PAGE_SIZE_PARAM,
         missing=missing,
     )
 
@@ -58,6 +67,13 @@ class SearchRecipeSchema(Schema):
         missing=missing,
     )
 
+    recipe_category = ListOrOne(
+        fields.Str(),
+        attribute=RECIPE_CATEGORY_PARAM,
+        data_key=RECIPE_CATEGORY_PARAM,
+        missing=missing,
+    )
+
 
 class SearchIngredientSchema(Schema):
 
@@ -65,6 +81,13 @@ class SearchIngredientSchema(Schema):
     page_number = fields.Int(
         attribute=PAGE_NUMBER_PARAM,
         data_key=PAGE_NUMBER_PARAM,
+        missing=missing,
+    )
+
+    # page size
+    page_size = fields.Int(
+        attribute=PAGE_SIZE_PARAM,
+        data_key=PAGE_SIZE_PARAM,
         missing=missing,
     )
 
