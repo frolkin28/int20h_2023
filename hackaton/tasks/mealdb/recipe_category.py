@@ -21,7 +21,7 @@ def _parse_recipe_category_data(
     mealdb_category_data: t.Dict[str, t.Any]
 ) -> t.Dict[str, t.Any]:
     return {
-        'title': mealdb_category_data.get('strCategory'),
+        'title': mealdb_category_data['strCategory'].lower(),
         'description': mealdb_category_data.get('strCategoryDescription'),
         'img_url': mealdb_category_data.get('strCategoryThumb'),
     }

@@ -25,12 +25,12 @@ def _parse_ingredient_data(
     mealdb_ingredient_data: t.Dict[str, t.Any]
 ) -> t.Dict[str, t.Any]:
     result = {
-        'title': mealdb_ingredient_data.get('strIngredient'),
+        'title': mealdb_ingredient_data['strIngredient'].lower(),
     }
     if mealdb_ingredient_data.get('strDescription'):
         result['description'] = mealdb_ingredient_data['strDescription']
     if mealdb_ingredient_data.get('strType'):
-        result['type'] = mealdb_ingredient_data['strType']
+        result['type'] = mealdb_ingredient_data['strType'].lower()
 
     return result
 
@@ -88,7 +88,7 @@ async def _migrate_ingredient(ingredient: t.Dict[str, t.Any]) -> None:
         log.info(f'insert ingredient {ingredient_mealdb_id=}')
 
     if ingredient.type:
-        await _migrate_ingredient_type(ingredient.type)
+        await _migrate_ingredient_type(ingredient.type.lower())
 
 
 async def migrate_ingredients(app: web.Application):

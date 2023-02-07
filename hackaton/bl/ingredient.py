@@ -31,6 +31,8 @@ def create_ingredient(
 ) -> Ingredient:
     ingredient = Ingredient(**data)
     ingredient.source = source
+    if ingredient.title:
+        ingredient.title = ingredient.title.lower()
 
     return ingredient
 
@@ -39,6 +41,8 @@ def update_ingredient(
     ingredient: Ingredient, data: t.Dict[str, t.Any]
 ) -> Ingredient:
     ingredient.update(data)
+    if ingredient.title:
+        ingredient.title = ingredient.title.lower()
 
     return ingredient
 

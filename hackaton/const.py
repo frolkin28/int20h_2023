@@ -18,6 +18,7 @@ INGREDIENT_TYPE_PARAM = 'ingredient_type'
 class SourceTypeEnum(enum.Enum):
     mealdb = 'mealdb'
     user = 'user'
+    migration = 'migration'
 
 
 @enum.unique

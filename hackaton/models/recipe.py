@@ -11,9 +11,9 @@ class Recipe(Document):
         strict = False
 
     doc_id = fields.ObjectIdField(attribute='_id')
-    title = fields.StrField()
+    title = fields.StrField(required=True)
     description = fields.StrField()
-    category = fields.StrField()
+    category = fields.StrField(required=True)
     instructions = fields.StrField()
     area = fields.StrField()
     img_url = fields.StrField()
@@ -29,4 +29,4 @@ class Recipe(Document):
         fields.EmbeddedField(IngredientItem),
         default=[]
     )
-    source = fields.EmbeddedField(Source)
+    source = fields.EmbeddedField(Source, required=True)

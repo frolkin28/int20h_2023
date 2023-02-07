@@ -29,6 +29,8 @@ def create_recipe_category(
 ) -> RecipeCategory:
     recipe_category = RecipeCategory(**data)
     recipe_category.source = source
+    if recipe_category.title:
+        recipe_category.title = recipe_category.title.lower()
 
     return recipe_category
 
@@ -37,5 +39,7 @@ def update_recipe_category(
     recipe_category: RecipeCategory, data: t.Dict[str, t.Any]
 ) -> RecipeCategory:
     recipe_category.update(data)
+    if recipe_category.title:
+        recipe_category.title = recipe_category.title.lower()
 
     return recipe_category

@@ -8,5 +8,5 @@ class Source(EmbeddedDocument):
     class Meta:
         strict = False
 
-    type = fields.StrField()
+    type = fields.StrField(required=True)
     id = fields.StrField()

@@ -4,7 +4,10 @@ import typing as t
 
 from aiohttp import web
 
-from hackaton.bl.ingredient import get_ingredient_by_ingredient_title
+from hackaton.bl.ingredient import (
+    get_ingredient_by_ingredient_title,
+    create_ingredient,
+)
 from hackaton.bl.recipe import (
     get_recipe_by_recipe_mealdb_id,
     create_recipe,
@@ -29,7 +32,7 @@ async def _parse_recipe_ingredients_data(
     for key, value in mealdb_recipe_data.items():
         if key.startswith('strIngredient') and value:
             split_key = key.split('strIngredient')
-            ingredient_titles[split_key[1]] = value
+            ingredient_titles[split_key[1]] = value.lower()
         if key.startswith('strMeasure') and value:
             split_key = key.split('strMeasure')
             ingredient_measures[split_key[1]] = value
@@ -46,6 +49,20 @@ async def _parse_recipe_ingredients_data(
         ingredient = await get_ingredient_by_ingredient_title(ingredient_title)
         if ingredient:
             ingredient_item['ingredient_id'] = str(ingredient.doc_id)
+        else:
+            source = Source(
+                type=SourceTypeEnum.migration.value,
+            )
+            new_ingredient = create_ingredient(
+                data={'title': ingredient_title},
+                source=source
+            )
+            resp = await new_ingredient.commit()
+            new_ingredient_doc_id = str(resp.inserted_id)
+            ingredient_item['ingredient_id'] = new_ingredient_doc_id
+            log.info(
+                f'Not found id for ingredient {ingredient_title=}, '
+                f'created new ingredient {new_ingredient_doc_id}')
 
         ingredient_items.append(ingredient_item)
 
@@ -58,8 +75,8 @@ async def _parse_recipe_data(
     tags_data = mealdb_recipe_data.get('strTags') or ''
     tags = [tag.strip() for tag in tags_data.split(',')]
     result = {
-        'title': mealdb_recipe_data.get('strMeal'),
-        'category': mealdb_recipe_data.get('strCategory'),
+        'title': mealdb_recipe_data['strMeal'],
+        'category': mealdb_recipe_data['strCategory'].lower(),
         'area': mealdb_recipe_data.get('strArea'),
         'instructions': mealdb_recipe_data.get('strInstructions'),
         'drink_alternate': mealdb_recipe_data.get('strDrinkAlternate'),
@@ -118,7 +135,14 @@ async def migrate_recipes_by_category(
     )
 
     for recipe_short_data in recipes:
-        await _migrate_recipe(app, recipe_short_data)
+        try:
+            await _migrate_recipe(app, recipe_short_data)
+        except Exception as e:
+            log.error(
+                f'Error while _migrate_recipe {recipe_short_data=}, '
+                f'e: {str(e)}'
+            )
+            continue
 
     log.info(
         f'---- migrate_recipes_by_category '

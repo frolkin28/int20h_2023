@@ -8,6 +8,6 @@ class IngredientItem(EmbeddedDocument):
     class Meta:
         strict = False
 
-    ingredient_id = fields.StrField()
-    ingredient_title = fields.StrField()
+    ingredient_id = fields.StrField(required=True)
+    ingredient_title = fields.StrField(required=True)
     measure = fields.StrField()
