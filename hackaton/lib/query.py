@@ -4,6 +4,7 @@ from bson.errors import InvalidId
 from hackaton.lib.payloads.auth import UserPayload
 from hackaton.models.user import User
 from hackaton.models.ingredient import Ingredient
+from hackaton.models.ingredient_type import IngredientType
 from hackaton.models.recipe import Recipe
 
 
@@ -45,3 +46,10 @@ async def get_ingredient_by_id(ing_id: str) -> Recipe | None:
         return None
 
     return record
+
+
+async def get_ingredient_types(limit: int = 10, offset: int = 0) -> list[IngredientType]:
+    res = []
+    async for record in IngredientType.find({}).skip(offset).limit(limit):
+        res.append(record)
+    return res

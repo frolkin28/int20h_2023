@@ -9,10 +9,12 @@ from hackaton.models.user import User
 from hackaton.lib.auth import with_auth_user
 from hackaton.bl.ingredient import create_ingredient
 from hackaton.bl.ingredient import push_user_product
+from hackaton.lib.query import get_ingredient_types
 from hackaton.lib.payloads.indredient import IngredientPayload
 from hackaton.lib.exceptions import SchemaValidationError
 from hackaton.lib.rest_utils import error_response
 from hackaton.lib.rest_utils import ok_response
+from hackaton.lib.utils import serialize_mongo_records
 
 log = getLogger(__name__)
 
@@ -59,3 +61,10 @@ async def add_user_product(request: web.Request, user: User) -> web.Response:
             errors_mapping={'message': 'No such ingredient'},
         )
     return ok_response()
+
+
+async def get_ingredient_type_list(request: web.Request) -> web.Response:
+    limit = int(request.query.get('limit', 10))
+    offset = int(request.query.get('offset', 0))
+    ingr_types = await get_ingredient_types(limit, offset)
+    return ok_response(payload=serialize_mongo_records(ingr_types))
