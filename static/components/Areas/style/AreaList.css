@@ -1,0 +1,33 @@
+.areas-declaration {
+  font-size: 32px;
+  font-weight: 400;
+  text-align: center;
+  padding: 25px;
+  text-decoration: underline;
+}
+
+.areas-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  padding-bottom: 35px;
+}
+
+.areas-list .area {
+  width: 150px;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 150px;
+          flex: 1 1 150px;
+  padding-bottom: 20px;
+}
+
+.areas-list .area-name {
+  text-align: center;
+  font-size: 20px;
+}
+/*# sourceMappingURL=AreaList.css.map */

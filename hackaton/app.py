@@ -11,7 +11,7 @@ from aiohttp.web_app import Application
 from aiohttp.web_middlewares import normalize_path_middleware
 
 from hackaton import signals
-from hackaton.config import CONFIG, STATIC_PATH
+from hackaton.config import CONFIG
 from hackaton.middlewares import main_middleware
 from hackaton.routes import setup_routes
 from hackaton.lib.auth import MongoAuthorizationPolicy
@@ -38,11 +38,10 @@ async def make_app() -> Application:
         ]
     )
 
+    start()
+
     setup_routes(app)
     get_running_loop().set_default_executor(ThreadPoolExecutor(max_workers=4))
-    if CONFIG['is_debug']:
-        # app.router.add_static(CONFIG['static_root'], STATIC_PATH, name='build')
-        start()
 
     secret_key = urlsafe_b64decode(CONFIG['secret_key'].encode('utf-8'))
     storage = EncryptedCookieStorage(secret_key, cookie_name='session')

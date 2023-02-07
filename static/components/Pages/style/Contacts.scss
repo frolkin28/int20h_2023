@@ -1,0 +1,18 @@
+@import '../../../universal-styles/PageMixins';
+
+.contacts-page 
+{
+    .contacts-declaration {@include pageDeclaration();}
+    .contact {@include content();}
+
+    .link-images 
+    {
+        @include linkImage();
+        .github-image {
+            width: 40%;
+        }
+        .linkedin-image {
+            width: 35%;
+        }
+    }
+}

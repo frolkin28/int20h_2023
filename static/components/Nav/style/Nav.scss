@@ -1,0 +1,95 @@
+$navColor: rgb(175, 200, 150);
+$linkColor: #551ABB;
+
+.nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-height: 12vh;
+    background-color: $navColor;
+}
+
+.logo-block
+{
+    .logo {
+        width: 90px;
+        border: 3px solid black;
+        border-radius: 20%;
+        position: relative;
+        top: 2px;
+    }
+
+}
+
+.nav-list
+{
+    display: flex;
+    justify-content: space-around;
+    width: 35%;
+    height: 15px;
+    list-style: none;
+
+    a {
+        color: $linkColor;
+        font-size: 18px;
+        font-weight: 600;
+
+        &:hover {
+            color: darkred;
+        }
+    }
+
+    .searchbar {
+        position: relative;
+        display: flex;
+        bottom: 5px;
+        background-color: white;
+
+        .search-text {
+            width: 150px;
+            height: 25px;
+        }
+
+        .search-button {
+            width: 25px;
+            height: 25px
+        }
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .nav-list {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 860px) {
+    .nav-list {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 500px)
+{
+    .logo-block {
+        .logo {
+            width: 50px;
+        }
+    }
+    .nav-list
+    {
+        .search-text {
+            width: 100px;
+            height: 20px;
+        }
+        .search-button {
+            width: 20px;
+            height: 20px;
+        }
+    }
+    .nav-list {
+        a {
+            font-size: 16px;
+        }
+    }
+}
