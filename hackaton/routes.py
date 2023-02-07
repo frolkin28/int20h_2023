@@ -3,6 +3,7 @@ from aiohttp import web
 
 from hackaton.handlers.health import health_check
 from hackaton.handlers.admin import migration
+from hackaton.handlers.admin import recipe
 from hackaton.handlers.auth import register
 from hackaton.handlers.auth import login
 from hackaton.handlers.auth import logout
@@ -38,6 +39,10 @@ def setup_routes(app: web.Application) -> None:
     app.router.add_get(
         '/admin/migration/mealdb_full_migration',
         migration.mealdb_full_migration
+    )
+    app.router.add_get(
+        '/admin/recipe/calculate_difficulty_level_for_all_recipes',
+        recipe.calculate_difficulty_level_for_all_recipes
     )
 
     # auth routes

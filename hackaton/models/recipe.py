@@ -20,7 +20,7 @@ class Recipe(Document):
     video_url = fields.StrField()
     source_url = fields.StrField()
     drink_alternate = fields.StrField()
-    difficulty_level = fields.StrField()
+    difficulty_level = fields.IntField()
     tags = fields.ListField(
         fields.StrField(),
         default=[]
