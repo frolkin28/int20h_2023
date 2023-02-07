@@ -2,8 +2,6 @@ import aiohttp_cors
 from aiohttp import web
 
 from hackaton.handlers.health import health_check
-from hackaton.handlers.admin import migration
-from hackaton.handlers.admin import recipe
 from hackaton.handlers.auth import register
 from hackaton.handlers.auth import login
 from hackaton.handlers.auth import logout
@@ -23,32 +21,6 @@ from hackaton.config import CONFIG
 def setup_routes(app: web.Application) -> None:
     # health check
     app.router.add_get('/health', health_check)
-
-    # admin routes
-    app.router.add_get(
-        '/admin/migration/recipe_categories',
-        migration.migrate_recipe_categories
-    )
-    app.router.add_get(
-        '/admin/migration/ingredients',
-        migration.migrate_ingredients
-    )
-    app.router.add_get(
-        '/admin/migration/migrate_recipes_by_categories',
-        migration.migrate_recipes_by_categories
-    )
-    app.router.add_get(
-        '/admin/migration/mealdb_full_migration',
-        migration.mealdb_full_migration
-    )
-    app.router.add_get(
-        '/admin/recipe/calculate_difficulty_level_for_all_recipes',
-        recipe.calculate_difficulty_level_for_all_recipes
-    )
-    app.router.add_get(
-        '/admin/recipe/add_ingredients_ids_field_for_all_recipes',
-        recipe.add_ingredients_ids_field_for_all_recipes
-    )
 
     # auth routes
     app.router.add_post('/auth/register', register)
