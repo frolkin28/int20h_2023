@@ -40,3 +40,7 @@ def serialize_mongo_record(record: Document) -> dict[str, t.Any]:
     data = record.to_mongo()
     data['id'] = str(data.pop('_id'))
     return data
+
+
+def serialize_mongo_records(records: list[Document]) -> list[dict[str, t.Any]]:
+    return [serialize_mongo_record(r) for r in records]
