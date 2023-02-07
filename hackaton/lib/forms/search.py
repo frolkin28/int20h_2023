@@ -9,6 +9,7 @@ from hackaton.const import (
     INGREDIENT_TYPE_PARAM,
     RECIPE_CATEGORY_PARAM,
     PAGE_SIZE_PARAM,
+    QUERY_STRING_PARAM,
 )
 from hackaton.lib.forms import ListOrOne
 
@@ -43,6 +44,13 @@ class SearchRecipeSchema(Schema):
         attribute=SORT_PARAM,
         data_key=SORT_PARAM,
         validate=validate.ContainsOnly(RECIPE_SORT_CHOICES),
+        missing=missing,
+    )
+
+    # search string from user
+    query_string = fields.Str(
+        attribute=QUERY_STRING_PARAM,
+        data_key=QUERY_STRING_PARAM,
         missing=missing,
     )
 
@@ -88,6 +96,13 @@ class SearchIngredientSchema(Schema):
     page_size = fields.Int(
         attribute=PAGE_SIZE_PARAM,
         data_key=PAGE_SIZE_PARAM,
+        missing=missing,
+    )
+
+    # search string from user
+    query_string = fields.Str(
+        attribute=QUERY_STRING_PARAM,
+        data_key=QUERY_STRING_PARAM,
         missing=missing,
     )
 

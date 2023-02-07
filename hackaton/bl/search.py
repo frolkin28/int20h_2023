@@ -15,6 +15,7 @@ from hackaton.const import (
     INGREDIENT_TYPE_PARAM,
     RECIPE_CATEGORY_PARAM,
     PAGE_SIZE_PARAM,
+    QUERY_STRING_PARAM,
 )
 
 log = logging.getLogger(__name__)
@@ -167,6 +168,15 @@ class BaseSearchMongoExecutor:
             'source.id': {'$in': user_ids}
         }
 
+    @staticmethod
+    def _query_string_filter(query_string: str):
+        if not query_string:
+            return None
+
+        return {
+            '$text': { '$search': query_string }
+        }
+
 
 class RecipeSearchMongoExecutor(BaseSearchMongoExecutor):
     def _build_query(self) -> (
@@ -176,6 +186,10 @@ class RecipeSearchMongoExecutor(BaseSearchMongoExecutor):
         ]
     ):
         id_filter = self._exists('_id')
+
+        query_string_filter = self._query_string_filter(
+            self.filter_data.get(QUERY_STRING_PARAM)
+        )
 
         ingredients_ids_filter = self._ingredients_ids_filter(
             ingredients_ids=self.filter_data.get(INGREDIENTS_IDS_PARAM)
@@ -197,6 +211,7 @@ class RecipeSearchMongoExecutor(BaseSearchMongoExecutor):
 
         filters = [
             id_filter,
+            query_string_filter,
             ingredients_ids_filter,
             created_by_user_ids_filter,
             area_filter,
@@ -238,6 +253,10 @@ class IngredientSearchMongoExecutor(BaseSearchMongoExecutor):
     ):
         id_filter = self._exists('_id')
 
+        query_string_filter = self._query_string_filter(
+            self.filter_data.get(QUERY_STRING_PARAM)
+        )
+
         created_by_user_ids_filter = self.created_by_user_ids_filter(
             user_ids=self.filter_data.get(CREATED_BY_USER_IDS_PARAM)
         )
@@ -252,6 +271,7 @@ class IngredientSearchMongoExecutor(BaseSearchMongoExecutor):
         )
 
         filters = [
+            query_string_filter,
             ingredients_ids_filter,
             created_by_user_ids_filter,
             ingredient_type_filter,
