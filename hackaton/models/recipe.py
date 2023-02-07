@@ -29,4 +29,8 @@ class Recipe(Document):
         fields.EmbeddedField(IngredientItem),
         default=[]
     )
+    ingredients_ids = fields.ListField(
+        fields.StrField(),
+        default=[]
+    )
     source = fields.EmbeddedField(Source, required=True)

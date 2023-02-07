@@ -20,6 +20,10 @@ def create_recipe(
     recipe = Recipe(**data)
     recipe.source = source
     recipe.difficulty_level = calculate_difficulty_level(recipe)
+    recipe.ingredients_ids = [
+        ingredient_item.ingredient_id
+        for ingredient_item in recipe.ingredients
+    ]
 
     return recipe
 
@@ -29,6 +33,10 @@ def update_recipe(
 ) -> Recipe:
     recipe.update(data)
     recipe.difficulty_level = calculate_difficulty_level(recipe)
+    recipe.ingredients_ids = [
+        ingredient_item.ingredient_id
+        for ingredient_item in recipe.ingredients
+    ]
 
     return recipe
 

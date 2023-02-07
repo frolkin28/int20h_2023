@@ -185,8 +185,6 @@ class RecipeSearchMongoExecutor(BaseSearchMongoExecutor):
             t.Optional[t.List[t.Tuple[str, int]]]
         ]
     ):
-        id_filter = self._exists('_id')
-
         query_string_filter = self._query_string_filter(
             self.filter_data.get(QUERY_STRING_PARAM)
         )
@@ -210,7 +208,6 @@ class RecipeSearchMongoExecutor(BaseSearchMongoExecutor):
         )
 
         filters = [
-            id_filter,
             query_string_filter,
             ingredients_ids_filter,
             created_by_user_ids_filter,
@@ -220,7 +217,10 @@ class RecipeSearchMongoExecutor(BaseSearchMongoExecutor):
 
         filters = [f for f in filters if f]
 
-        query = self._and(conditions=filters)
+        if len(filters) == 1:
+            query = filters[0]
+        else:
+            query = self._and(conditions=filters)
 
         sort_keys = self.filter_data.get(SORT_PARAM)
         sort_query = self._sort(sort_keys)
@@ -239,9 +239,26 @@ class RecipeSearchMongoExecutor(BaseSearchMongoExecutor):
         if not ingredients_ids:
             return None
 
-        return {
-            'ingredients.ingredient_id': {'$all': ingredients_ids}
-        }
+        if len(ingredients_ids) > 3:
+            query = {
+                'ingredients_ids': { '$in': ingredients_ids },
+                '$expr': {
+                    '$gte': [
+                        { '$size': {
+                            '$setIntersection':
+                                ['$ingredients_ids', ingredients_ids]
+                            }
+                        },
+                        3
+                    ]
+                }
+            }
+        else:
+            query = {
+                'ingredients.ingredient_id': {'$all': ingredients_ids}
+            }
+
+        return query
 
 
 class IngredientSearchMongoExecutor(BaseSearchMongoExecutor):
@@ -251,8 +268,6 @@ class IngredientSearchMongoExecutor(BaseSearchMongoExecutor):
             t.Optional[t.List[t.Tuple[str, int]]]
         ]
     ):
-        id_filter = self._exists('_id')
-
         query_string_filter = self._query_string_filter(
             self.filter_data.get(QUERY_STRING_PARAM)
         )
@@ -276,9 +291,6 @@ class IngredientSearchMongoExecutor(BaseSearchMongoExecutor):
             created_by_user_ids_filter,
             ingredient_type_filter,
         ]
-
-        if not ingredients_ids_filter:
-            filters.append(id_filter)
 
         filters = [f for f in filters if f]
 

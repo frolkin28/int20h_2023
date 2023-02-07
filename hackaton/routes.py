@@ -44,6 +44,10 @@ def setup_routes(app: web.Application) -> None:
         '/admin/recipe/calculate_difficulty_level_for_all_recipes',
         recipe.calculate_difficulty_level_for_all_recipes
     )
+    app.router.add_get(
+        '/admin/recipe/add_ingredients_ids_field_for_all_recipes',
+        recipe.add_ingredients_ids_field_for_all_recipes
+    )
 
     # auth routes
     app.router.add_post('/auth/register', register)
