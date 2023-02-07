@@ -217,7 +217,9 @@ class RecipeSearchMongoExecutor(BaseSearchMongoExecutor):
 
         filters = [f for f in filters if f]
 
-        if len(filters) == 1:
+        if not filters:
+            query = {}
+        elif len(filters) == 1:
             query = filters[0]
         else:
             query = self._and(conditions=filters)
@@ -294,7 +296,9 @@ class IngredientSearchMongoExecutor(BaseSearchMongoExecutor):
 
         filters = [f for f in filters if f]
 
-        if len(filters) == 1:
+        if not filters:
+            query = {}
+        elif len(filters) == 1:
             query = filters[0]
         else:
             query = self._and(conditions=filters)
