@@ -57,3 +57,17 @@ async def push_user_product(app: web.Application, user_id: ObjectId, ingredient_
         {'$push': {'product_ids': ingredient_id}},
     )
     return True
+
+
+async def remove_user_product(
+    app: web.Application, user_id: ObjectId, ingredient_id: str
+) -> bool:
+    ingr = await get_ingredient_by_id(ingredient_id)
+    if not ingr:
+        return False
+
+    await app['mongo_db'].user.update_one(
+        {'_id': user_id},
+        {'$pull': {'product_ids': ingredient_id}},
+    )
+    return True

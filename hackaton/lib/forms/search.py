@@ -82,6 +82,8 @@ class SearchRecipeSchema(Schema):
         missing=missing,
     )
 
+    for_user = fields.Bool(load_default=False)
+
 
 class SearchIngredientSchema(Schema):
 
@@ -126,3 +128,5 @@ class SearchIngredientSchema(Schema):
         data_key=INGREDIENT_TYPE_PARAM,
         missing=missing,
     )
+
+    for_user = fields.Bool(load_default=False)

@@ -7,7 +7,7 @@ from hackaton.const import SourceTypeEnum
 from hackaton.models.source import Source
 from hackaton.models.user import User
 from hackaton.lib.auth import with_auth_user
-from hackaton.bl.ingredient import create_ingredient
+from hackaton.bl.ingredient import create_ingredient, remove_user_product
 from hackaton.bl.ingredient import push_user_product
 from hackaton.lib.query import get_ingredient_types
 from hackaton.lib.query import create_ingredient_type
@@ -60,6 +60,24 @@ async def add_user_product(request: web.Request, user: User) -> web.Response:
             errors_mapping={'message': 'Invalid payload'},
         )
     res = await push_user_product(request.app, user.doc_id, ingr_id)
+    if not res:
+        return error_response(
+            code=httplib.CONFLICT,
+            errors_mapping={'message': 'No such ingredient'},
+        )
+    return ok_response()
+
+
+@with_auth_user
+async def delete_user_product(request: web.Request, user: User) -> web.Response:
+    request_data = await request.json()
+    ingr_id = request_data.get('product_id')
+    if not ingr_id:
+        return error_response(
+            code=httplib.BAD_REQUEST,
+            errors_mapping={'message': 'Invalid payload'},
+        )
+    res = await remove_user_product(request.app, user.doc_id, ingr_id)
     if not res:
         return error_response(
             code=httplib.CONFLICT,

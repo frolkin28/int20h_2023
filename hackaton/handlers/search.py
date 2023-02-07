@@ -10,6 +10,8 @@ from hackaton.bl.search import (
     IngredientSearchMongoExecutor,
 )
 from hackaton.config import CONFIG
+from hackaton.const import INGREDIENTS_IDS_PARAM
+from hackaton.lib.auth import get_current_user
 from hackaton.lib.forms.search import (
     SearchRecipeSchema,
     SearchIngredientSchema,
@@ -36,6 +38,13 @@ async def search_recipe(request: web.Request) -> web.Response:
         result = e.valid_data
 
     app = request.app
+
+    if result['for_user'] is True:
+        user = await get_current_user(request)
+        if not user:
+            return error_response(code=httplib.UNAUTHORIZED)
+
+        result[INGREDIENTS_IDS_PARAM] = user.product_ids
 
     search_executor = RecipeSearchMongoExecutor(
         db=app['mongo_db'].recipe,
@@ -90,6 +99,26 @@ async def search_ingredient(request: web.Request) -> web.Response:
         result = e.valid_data
 
     app = request.app
+
+    if result['for_user'] is True:
+        user = await get_current_user(request)
+        if not user:
+            return error_response(code=httplib.UNAUTHORIZED)
+
+        if not user.product_ids:
+            return ok_response(
+                payload={
+                    "currentPage": 1,
+                    "nextPage": None,
+                    "prevPage": None,
+                    "pageAmount": 0,
+                    "totalHits": 0,
+                    "itemsPerPage": 0,
+                    "ingredients": [],
+                },
+            )
+
+        result[INGREDIENTS_IDS_PARAM] = user.product_ids
 
     search_executor = IngredientSearchMongoExecutor(
         db=app['mongo_db'].ingredient,

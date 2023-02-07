@@ -14,6 +14,7 @@ from hackaton.handlers.search import search_recipe
 from hackaton.handlers.search import search_ingredient
 from hackaton.handlers.ingredient import add_ingredient
 from hackaton.handlers.ingredient import add_user_product
+from hackaton.handlers.ingredient import delete_user_product
 from hackaton.handlers.ingredient import get_ingredient_type_list
 from hackaton.handlers.ingredient import create_ingredient_type_handler
 from hackaton.config import CONFIG
@@ -58,6 +59,7 @@ def setup_routes(app: web.Application) -> None:
     app.router.add_get(r'/api/recipe/{id:\w+}', recipe_view)
     app.router.add_post('/api/ingredient', add_ingredient)
     app.router.add_post('/api/user/product', add_user_product)
+    app.router.add_delete('/api/user/product', delete_user_product)
 
     app.router.add_post('/api/recipe/search', search_recipe)
     app.router.add_post('/api/ingredient/search', search_ingredient)
