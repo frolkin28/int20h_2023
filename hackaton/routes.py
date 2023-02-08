@@ -16,10 +16,12 @@ from hackaton.handlers.ingredient import delete_user_product
 from hackaton.handlers.ingredient import get_ingredient_type_list
 from hackaton.handlers.ingredient import create_ingredient_type_handler
 from hackaton.config import CONFIG
+from hackaton.config import STATIC_PATH
 
 
 def setup_routes(app: web.Application) -> None:
     # health check
+    app.router.add_static(CONFIG['static_root'], STATIC_PATH, name='build')
     app.router.add_get('/health', health_check)
 
     # auth routes

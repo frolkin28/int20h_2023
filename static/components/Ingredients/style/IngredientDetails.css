@@ -1,0 +1,22 @@
+.ingredient-name {
+  font-size: 32px;
+  text-align: center;
+  padding-top: 15px;
+  padding-bottom: 35px;
+}
+
+.ingredient-image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10%;
+  width: 25%;
+}
+
+.ingredient-description {
+  font-size: 24px;
+  text-align: left;
+  padding: 25px;
+  padding-bottom: 35px;
+}
+/*# sourceMappingURL=IngredientDetails.css.map */

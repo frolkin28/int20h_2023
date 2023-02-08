@@ -1,0 +1,69 @@
+@use '../../../universal-styles/DetailsMixins.css';
+
+.name {@include name();}
+.image {@include image(80%);}
+
+.info 
+{
+    display: flex;
+    justify-content: center;
+    padding-top: 15px;
+    padding-bottom: 20px;
+    font-size: 20px;
+    flex-wrap: wrap;
+
+    .tags {
+        padding-right: 25px;
+    }
+    .category {
+        padding-right: 25px;
+    }
+    .area {
+        padding-right: 25px;
+    }
+}
+
+@mixin declaration($text-align: left) 
+{
+    font-size: 32px;
+    font-weight: 400;
+    text-align: $text-align;
+    padding: 25px;
+    text-decoration: underline;
+}
+
+@mixin text()
+{
+    font-size: 20px;
+    font-weight: 400;
+    text-align: left;
+    line-height: 1.3em;
+}
+
+.block-content 
+{
+    display: flex;
+    justify-content: center;
+    padding-bottom: 35px;
+
+    .ingredient-block 
+    {
+        padding-left: 20px;
+        .ingredients-declaration {@include declaration();}
+        .ingredients {@include text();}
+    }
+}
+
+.instructions-block 
+{
+    padding-bottom: 35px;
+    .instructions-declation {@include declaration(center);}
+    .instructions 
+    {
+        @include text();
+        width: 75%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

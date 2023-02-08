@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AAEA,AAAA,gBAAgB,CAAC;ECAb,SAAS,EAAE,IAAI;EACf,UAAU,EAAE,MAAM;EAClB,WAAW,EAAE,IAAI;EACjB,cAAc,EAAE,IAAI;CDHY;;AACpC,AAAA,iBAAiB,CAAC;ECOd,OAAO,EAAE,KAAK;EACd,WAAW,EAAE,IAAI;EACjB,YAAY,EAAE,IAAI;EAClB,aAAa,EAAE,GAAG;EAClB,KAAK,EDXyB,GAAG;CAAI;;AACzC,AAAA,uBAAuB,CAAC;ECepB,SAAS,EAAE,IAAI;EACf,UAAU,EDhBgC,IAAI;ECiB9C,OAAO,EAAE,IAAI;EACb,cAAc,EAAE,IAAI;CDlB8B",
+    "sources": [
+        "IngredientDetails.scss",
+        "../../../universal-styles/DetailsMixins.scss"
+    ],
+    "names": [],
+    "file": "IngredientDetails.css"
+}
