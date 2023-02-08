@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json /app
 COPY package-lock.json /app
 
-RUN npm install --legacy-peer-deps --loglevel=error
+RUN npm install --loglevel=error
 
 ENV NODE_OPTIONS=--openssl-legacy-provider
 
