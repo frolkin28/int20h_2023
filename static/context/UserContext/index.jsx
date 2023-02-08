@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 
 const UserContext = React.createContext({});
 
@@ -7,22 +8,19 @@ export const useUser = () => {
 };
 
 export const UserContextProvider = ({ children }) => {
-  const [userId, setUserId] = useState(null);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
+  const { isLoading, data, error, refetch } = useQuery("user", () =>
     fetch("/api/user")
       .then((response) => response.json())
       .then((data) => {
-        if (!data) return;
-        if (data.status !== "success") setUser(null);
-        else setUser(data.payload);
-      });
-  }, [userId]);
+        if (data.status === "success") return data.payload;
+        else return null;
+      })
+  );
 
   const userContextValue = {
-    setUserId: setUserId,
-    user: user,
+    reloadUser: refetch,
+    user: isLoading || error ? null : data,
+    isLoading: isLoading,
   };
 
   return (
