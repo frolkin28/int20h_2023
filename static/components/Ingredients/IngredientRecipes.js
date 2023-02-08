@@ -19,7 +19,7 @@ function IngredientRecipes(props)
     const moreRecipesHandler = () => setPage(page + 1);
 
     useEffect(() => {
-        fetch(`http://0.0.0.0:8080/api/recipe/search`, {
+        fetch(`/api/recipe/search`, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',

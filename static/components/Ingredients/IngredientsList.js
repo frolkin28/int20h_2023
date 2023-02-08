@@ -28,7 +28,7 @@ function IngredientsList(props)
     }, props.searchWord)
 
     useEffect(() => {
-        fetch(`http://0.0.0.0:8080/api/ingredient/search`,{
+        fetch(`/api/ingredient/search`,{
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
@@ -48,7 +48,7 @@ function IngredientsList(props)
     }, [page, ingredientType, props.searchWord]);
 
     useEffect(() => {
-        fetch(`http://0.0.0.0:8080/api/ingredient_types`,{
+        fetch(`/api/ingredient_types`,{
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',

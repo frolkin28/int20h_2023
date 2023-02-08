@@ -11,7 +11,7 @@ function Recipe({match})
   setTimeout(() => setLoading(false), 5000);
 
   useEffect(() => {
-    fetch(`http://0.0.0.0:8080/api/recipe/${match.params.id}`)
+    fetch(`/api/recipe/${match.params.id}`)
       .then(response => response.json())
       .then(data => {
         if(data.status !== 'success') return;
