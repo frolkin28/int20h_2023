@@ -24,14 +24,14 @@ async def register(request: web.Request) -> web.Response:
         register_payload = UserPayload.load(user_data)
     except SchemaValidationError as e:
         log.error(f'Invalid register data: {e.errors}')
-        return error_response(code=httplib.BAD_REQUEST, errors=e.errors)
+        return error_response(code=httplib.BAD_REQUEST, errors_mapping=e.errors)
 
     try:
         user = await register_user(register_payload)
     except UserAlreadyExists:
         return error_response(
             code=httplib.CONFLICT,
-            errors={'message': 'User already exists'},
+            errors_mapping={'message': 'User already exists'},
         )
     return ok_response(
         code=httplib.CREATED,
@@ -45,13 +45,16 @@ async def login(request: web.Request) -> web.Response:
         login_payload = LoginPayload.load(user_data)
     except SchemaValidationError as e:
         log.error(f'Invalid login data: {e.errors}')
-        return error_response(code=httplib.BAD_REQUEST, errors=e.errors)
+        return error_response(code=httplib.BAD_REQUEST, errors_mapping=e.errors)
 
     user_identity = await login_user(login_payload)
     if not user_identity:
-        return error_response(code=httplib.UNAUTHORIZED)
+        return error_response(
+            code=httplib.UNAUTHORIZED,
+            errors_mapping={'message': 'Invaliad email or password'},
+        )
 
-    response = ok_response()
+    response = ok_response(payload={'user_id': user_identity})
     await remember(request, response, user_identity)
     return response
 
