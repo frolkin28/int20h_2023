@@ -1,5 +1,5 @@
 const TerserPlugin = require("terser-webpack-plugin");
-const merge = require("webpack-merge");
+const { merge } = require("webpack-merge");
 const base = require("./base");
 
 module.exports = merge(base, {
@@ -9,7 +9,6 @@ module.exports = merge(base, {
     chunkIds: "size",
     minimizer: [
       new TerserPlugin({
-        cache: true,
         parallel: false,
         terserOptions: {
           compress: {
