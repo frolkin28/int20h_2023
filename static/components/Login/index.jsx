@@ -8,7 +8,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const history = useHistory();
-  const { setUserId } = useUser();
+  const { reloadUser } = useUser();
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -26,7 +26,7 @@ const Login = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data?.status === "success") {
-          setUserId(data.payload.user_id);
+          reloadUser();
           history.push("/");
         } else setError(JSON.stringify(error));
       });

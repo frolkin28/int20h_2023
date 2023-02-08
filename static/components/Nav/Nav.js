@@ -10,15 +10,15 @@ function Nav() {
     const [name, setName] = useState("");
     const location = useLocation();
     const searchBy = location.pathname.includes("ingredients") ? "ingredients" : "recipes";
-    const { user, setUserId } = useUser();
+    const { user, reloadUser } = useUser();
     const onLogoutClick = (e) => {
         e.preventDefault();
         fetch("/auth/logout", {
             method: "POST"
         })
             .then((response) => response.json())
-            .then((data) => {
-                if (data?.status !== "success") setUserId(null);
+            .then(() => {
+                reloadUser()
             });
     }
 
