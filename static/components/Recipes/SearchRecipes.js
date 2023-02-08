@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import LoadingPage from '../Pages/LoadingPage';
-import NoContent from '../Pages/NoContent';
+import React from 'react';
 import IngredientsList from "../Ingredients/IngredientsList";
 import FeaturedRecipesList from "../FeaturedRecipes/FeaturedRecipesList";
 
-function SearchRecipes({match})
-{
+function SearchRecipes({ match }) {
     const searchBy = match.params.pathname;
     const input = match.params.input;
 
