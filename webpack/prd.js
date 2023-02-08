@@ -4,6 +4,9 @@ const base = require("./base");
 
 module.exports = merge(base, {
   mode: "production",
+  output: {
+    publicPath: "/static/"
+  },
   optimization: {
     moduleIds: "hashed",
     chunkIds: "size",

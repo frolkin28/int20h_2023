@@ -58,8 +58,6 @@ services:
       dockerfile: docker/backend.dockerfile
       target: dev
     restart: unless-stopped
-    environment:
-      - PYTHONUNBUFFERED=1
     ports:
       - 8080:8080
     volumes:
@@ -68,6 +66,8 @@ services:
       - ./build:/app/build
       - ./pyproject.toml:/app/pyproject.toml
       - ./pdm.lock:/app/pdm.lock
+      - ./assets/logo.png:/app/build/logo.png
+      - ./assets/manifest.json:/app/build/manifest.json
 
   mongo-shell:
     image: mongo

@@ -49,6 +49,8 @@ FROM base AS prd
 
 COPY config /app/config
 COPY --from=frontend /app/build /app/build
+COPY assets/logo.png /app/build
+COPY assets/manifest.json /app/build
 COPY hackaton /app/hackaton
 
 ENV BACKEND_CONFIG_PATH "config/prd.yaml"
