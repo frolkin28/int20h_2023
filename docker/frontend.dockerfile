@@ -1,6 +1,8 @@
-FROM node:18.14-slim AS dev
+FROM node:18.14-buster AS dev
 
 WORKDIR /app
+
+RUN apt install make gcc g++ python3
 
 COPY package.json /app
 COPY package-lock.json /app

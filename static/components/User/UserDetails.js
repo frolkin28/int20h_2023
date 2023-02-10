@@ -11,22 +11,6 @@ function UserDetails(props) {
 
     setTimeout(() => setLoading(false), 5000);
 
-    const [ingredients, setIngredients] = useState([]);
-    const [ingredientsNum, setIngredientsNum] = useState(10);
-
-    const moreIngredientsHandler = () => setIngredientsNum(ingredientsNum + 10);
-
-    useEffect(() => {
-        //fetch(`/api/ingredients/`)
-        fetch(`https://www.themealdb.com/api/json/v1/1/list.php?i=list`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.meals === null) return;
-                setLoading(false);
-                setIngredients(data.meals);
-            });
-    }, []);
-
     return (
         <>
             {/*{loading === true ? (*/}
@@ -36,30 +20,14 @@ function UserDetails(props) {
             {/*) : (*/}
             <div className='home-page ingredients' id='ingredients'>
                 {user ? (
-                    <div className='ingredients-declaration'>HELLO, {user.first_name} {user.last_name}</div>
+                    <>
+                        <div className='ingredients-declaration'>HELLO</div>
+                        <div className='ingredients-declaration'>first_name : {user.first_name}</div>
+                        <div className='ingredients-declaration'>last_name : {user.last_name}</div>
+                    </>
+
                 ) : (
                     <div className='ingredients-declaration'>HELLO</div>
-                )}
-
-                <div className='ingredient-list'>
-                    {ingredients.slice(0, ingredientsNum).map((ingredient, index) => (
-                        <div className='ingredient' key={index}>
-                            <Link to={`/ingredients/${ingredient.strIngredient}`}>
-                                <img className='ingredient-thumbnail' src={`https://www.themealdb.com/images/ingredients/${ingredient.strIngredient}.png`} alt='T_T' />
-                                <div className='ingredient-name'>{ingredient.strIngredient}</div>
-                            </Link>
-                            <div className='button-container'>
-                                <button className='button'>Delete</button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-                {ingredients.length > ingredientsNum ? (
-                    <div className='button-container'>
-                        <button className='recipe-but more' onClick={moreIngredientsHandler}>More Ingredients</button>
-                    </div>
-                ) : (
-                    <></>
                 )}
             </div>
         </>

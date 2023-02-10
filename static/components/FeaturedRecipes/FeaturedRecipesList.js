@@ -40,7 +40,7 @@ function FeaturedRecipesList(props) {
             .then(data => {
                 if (data.status !== 'success') return;
                 setLoading(false);
-                if (difficultyLevel && page === 1 || props.searchWord && page === 1) setRecipes(data.payload.recipes);
+                if (difficultyLevel && page === 1 || props.searchWord && page === 1 || user && page === 1) setRecipes(data.payload.recipes);
                 else setRecipes([...recipes, ...data.payload.recipes])
                 setNextPage(data.payload.nextPage);
             })
@@ -64,7 +64,7 @@ function FeaturedRecipesList(props) {
                     {user && (
                         <label>
                             <input type="checkbox" checked={showUser} onChange={handleChangeShowUser} />
-                            Show only user product
+                            Show only recipes available for user
                         </label>
                     )
                     }

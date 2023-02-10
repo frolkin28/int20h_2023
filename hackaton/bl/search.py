@@ -270,6 +270,7 @@ class IngredientSearchMongoExecutor(BaseSearchMongoExecutor):
             t.Optional[t.List[t.Tuple[str, int]]]
         ]
     ):
+        log.critical(f'\n\n\n\n{"#"*100}\n data {self.filter_data}\n{"#"*100}\n\n')
         query_string_filter = self._query_string_filter(
             self.filter_data.get(QUERY_STRING_PARAM)
         )

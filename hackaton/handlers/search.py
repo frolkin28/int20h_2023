@@ -44,7 +44,8 @@ async def search_recipe(request: web.Request) -> web.Response:
         if not user:
             return error_response(code=httplib.UNAUTHORIZED)
 
-        result[INGREDIENTS_IDS_PARAM] = user.product_ids
+        product_ids = user.to_mongo().get('product_ids', [])
+        result[INGREDIENTS_IDS_PARAM] = product_ids
 
     search_executor = RecipeSearchMongoExecutor(
         db=app['mongo_db'].recipe,
@@ -105,7 +106,8 @@ async def search_ingredient(request: web.Request) -> web.Response:
         if not user:
             return error_response(code=httplib.UNAUTHORIZED)
 
-        if not user.product_ids:
+        product_ids = user.to_mongo().get('product_ids', [])
+        if not product_ids:
             return ok_response(
                 payload={
                     "currentPage": 1,
@@ -118,7 +120,7 @@ async def search_ingredient(request: web.Request) -> web.Response:
                 },
             )
 
-        result[INGREDIENTS_IDS_PARAM] = user.product_ids
+        result[INGREDIENTS_IDS_PARAM] = product_ids
 
     search_executor = IngredientSearchMongoExecutor(
         db=app['mongo_db'].ingredient,

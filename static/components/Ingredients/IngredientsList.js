@@ -65,7 +65,7 @@ function IngredientsList(props) {
             .then(data => {
                 if (data.status !== 'success') return;
                 setLoading(false);
-                if (ingredientType && page === 1 || props.searchWord && page === 1) setIngredients(data.payload.ingredients);
+                if (ingredientType && page === 1 || props.searchWord && page === 1 || user && page === 1) setIngredients(data.payload.ingredients);
                 else setIngredients([...ingredients, ...data.payload.ingredients]);
                 setNextPage(data.payload.nextPage);
             });
@@ -101,7 +101,7 @@ function IngredientsList(props) {
                     {user &&
                         <label>
                             <input type="checkbox" checked={showUser} onChange={handleChangeShowUser} />
-                            Show only recipes available for user
+                            Show only user product
                         </label>
                     }
                     <div className='ingredient-list'>
@@ -113,9 +113,12 @@ function IngredientsList(props) {
                                     <img className='ingredient-thumbnail' src={`https://www.themealdb.com/images/ingredients/${ingredient.title}.png`} alt='T_T' />
                                     <div className='ingredient-name'>{ingredient.title}</div>
                                 </Link>
-                                <div className='button-container'>
-                                    <button className='recipe-but' onClick={() => addIngredient(ingredient._id)}>Add</button>
-                                </div>
+                                {user && !showUser ? (
+                                        <div className='button-container'>
+                                            <button className='recipe-but' onClick={() => addIngredient(ingredient._id)}>Add</button>
+                                        </div>
+                                    ) : <></>
+                                }
                             </div>
                         ))}
                     </div>
